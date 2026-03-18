@@ -87,8 +87,8 @@ fun App() {
 @Composable
 fun WelcomeScreen(
     startGame: () -> Unit) {
-    var name1 by remember { mutableStateOf("filler") }
-    var name2 by remember { mutableStateOf("name") }
+    var name1 by remember { mutableStateOf("placeholder") }
+    var name2 by remember { mutableStateOf("placeholder") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -98,9 +98,10 @@ fun WelcomeScreen(
             .fillMaxSize(),
     ) {
         Text(
-            "it's tic-tac-toe",
+            "Tic-Tac-Toe",
             style = MaterialTheme.typography.displayMedium,
         )
+        /*TODO: Add drop down menus*/
         TextField(
             value = name1,
             onValueChange = {
@@ -113,12 +114,13 @@ fun WelcomeScreen(
             value = name2,
             onValueChange = {
                 name2 = it
-                            },
+            },
             modifier = Modifier.fillMaxWidth(),
             label = {Text("Player 2")}
         )
         Button(onClick = {startGame()}) {
             Text("Start")
+            /*TODO: Fails if either name is empty*/
         }
     }
 }
@@ -134,11 +136,11 @@ fun GameScreen() {
             .fillMaxSize(),
     ) {
         Text(
-            "it's the game screen",
+            "Game Screen",
             style = MaterialTheme.typography.displayMedium,
         )
         Text(
-            "it's not implemented yet"
+            "Not implemented yet"
         )
     }
 }
