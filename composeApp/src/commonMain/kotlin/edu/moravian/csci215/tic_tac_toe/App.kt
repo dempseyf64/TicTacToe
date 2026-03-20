@@ -22,16 +22,13 @@ fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
 
-    // Track current destination to show/hide the TopAppBar
     val curBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = curBackStackEntry?.destination?.route
 
     MaterialTheme {
-        // Requirement: Scaffold must be outside the NavHost
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
-                // Requirement: No top app bar on Welcome Screen (route "welcome")
                 if (currentRoute != "welcome") {
                     TopAppBar(
                         title = { Text(stringResource(Res.string.app_name)) },
@@ -40,7 +37,6 @@ fun App() {
                             titleContentColor = MaterialTheme.colorScheme.onPrimary,
                         ),
                         navigationIcon = {
-                            // Requirement: Back button to return to Welcome Screen
                             IconButton(onClick = { navController.navigate("welcome") }) {
                                 Icon(
                                     painterResource(Res.drawable.arrow_left),
@@ -52,7 +48,6 @@ fun App() {
                 }
             },
         ) { innerPadding ->
-            // Requirement: Exactly 3 major navigation routes
             NavHost(
                 navController = navController,
                 startDestination = "welcome",
@@ -62,7 +57,6 @@ fun App() {
                     WelcomeScreen(
                         snackbarHostState = snackbarHostState,
                         onStartGame = { p1Name, p1Type, p2Name, p2Type ->
-                            // TODO: In the next step, we will initialize the Game class with these values
                             navController.navigate("game")
                         }
                     )
