@@ -27,7 +27,7 @@ fun App() {
     val curBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = curBackStackEntry?.destination?.route
 
-    MaterialTheme {
+    AppTheme {
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
@@ -68,8 +68,8 @@ fun App() {
                         navArgument("p2Name") { type = NavType.StringType }
                     )
                 ) { backStackEntry ->
-                    val p1 = backStackEntry.arguments?.getString("p1Name") ?: "Player 1"
-                    val p2 = backStackEntry.arguments?.getString("p2Name") ?: "Player 2"
+                    val p1 = "Player 1" // backStackEntry.arguments?.getString("p1Name") ?: "Player 1"
+                    val p2 = "Player 2" // backStackEntry.arguments?.getString("p2Name") ?: "Player 2"
                     GameScreen(player1Name = p1, player2Name = p2)
                 }
             }

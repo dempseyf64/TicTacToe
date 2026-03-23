@@ -10,11 +10,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
+import tictactoe.composeapp.generated.resources.Papernotes
 import tictactoe.composeapp.generated.resources.Res
 import tictactoe.composeapp.generated.resources.checkerBkgd
 
