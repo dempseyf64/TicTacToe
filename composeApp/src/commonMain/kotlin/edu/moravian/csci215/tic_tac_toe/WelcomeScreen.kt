@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -45,6 +46,8 @@ fun WelcomeScreen(
     var type1 by rememberSaveable { mutableStateOf("Human") }
     var type2 by rememberSaveable { mutableStateOf("Human") }
 
+    val size = LocalWindowInfo.current.containerDpSize
+
     Box(modifier = Modifier.fillMaxSize()) {
         // Background Image
         Image(
@@ -58,7 +61,7 @@ fun WelcomeScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(16.dp),
+            modifier = Modifier.fillMaxSize().padding(if (size.height > size.width) 16.dp else 2.dp),
         ) {
             Text(
                 text = stringResource(Res.string.welcome),
@@ -75,13 +78,13 @@ fun WelcomeScreen(
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = (if (size.height > size.width) Arrangement.SpaceEvenly else Arrangement.Center)
             ) {
                 PlayerSetupField(stringResource(Res.string.player1), name1, { name1 = it }, type1, { type1 = it })
                 PlayerSetupField(stringResource(Res.string.player2), name2, { name2 = it }, type2, { type2 = it })
             }
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(if (size.height > size.width) 48.dp else 12.dp))
 
             // Start Button
             Button(
@@ -134,9 +137,11 @@ fun PlayerSetupField(
     val surface = WhiteSecondary
     val capsule = Capsule
 
+    val size = LocalWindowInfo.current.containerDpSize
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(if (size.height > size.width) 12.dp else 8.dp)
     ) {
         //ROW 1
         Text(
