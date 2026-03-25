@@ -13,11 +13,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import tictactoe.composeapp.generated.resources.*
 
 @Composable
 fun GameOverScreen(
     resultText: String,
+    p1Wins: Int,
+    p2Wins: Int,
+    ties: Int,
     onPlayAgain: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -37,7 +41,7 @@ fun GameOverScreen(
                 .padding(16.dp),
         ) {
             Text(
-                text = "GAME OVER",
+                text = stringResource(Res.string.gameover),
                 style = TextStyle(
                     fontFamily = OverlockFont(),
                     fontSize = 48.sp,
@@ -61,16 +65,66 @@ fun GameOverScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "placeholder",
-                style = TextStyle(
-                    fontFamily = OverlockFont(),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = RedLight,
-                    textAlign = TextAlign.Center
-                )
-            )
+            Row {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(Res.string.strawberry),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RedPrimary,
+                            textAlign = TextAlign.Center
+                        ))
+                    Text(p1Wins.toString(),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+
+                        ))
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(Res.string.tie),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RedPrimary,
+                            textAlign = TextAlign.Center
+                        ))
+                    Text(ties.toString(),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        ))
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(Res.string.orange),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RedPrimary,
+                            textAlign = TextAlign.Center
+                        ))
+                    Text(p2Wins.toString(),
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        ))
+                }
+            }
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -84,7 +138,7 @@ fun GameOverScreen(
                 )
             ) {
                 Text(
-                    text = "Play Again",
+                    text = stringResource(Res.string.playagain),
                     style = TextStyle(
                         fontFamily = OverlockFont(),
                         fontSize = 26.sp,

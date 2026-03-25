@@ -27,7 +27,7 @@ import kotlinx.serialization.Serializable
  */
 // Add this at the top with your other @Serializable objects (Welcome, Game)
 @Serializable
-data class GameOver(val resultMessage: String)
+data class GameOver(val resultMessage: String, val p1Wins: Int, val p2Wins: Int, val ties: Int)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,6 +91,9 @@ fun App() {
                 val gameOverData = backStackEntry.toRoute<GameOver>()
                 GameOverScreen(
                     resultText = gameOverData.resultMessage,
+                    p1Wins = gameOverData.p1Wins,
+                    p2Wins = gameOverData.p2Wins,
+                    ties = gameOverData.ties,
                     onPlayAgain = {
                         navController.popBackStack()
                     }

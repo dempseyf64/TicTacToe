@@ -105,16 +105,18 @@ fun GameScreen(
                                                     "Orange" -> "$player2Name Wins!\n(Orange)"
                                                     else -> "It's a Tie!"
                                                 }
-                                                if (result == "Strawberry") {
-                                                    p1WinCount++
+                                                when (result) {
+                                                    "Strawberry" -> {
+                                                        p1WinCount++
+                                                    }
+                                                    "Orange" -> {
+                                                        p2WinCount++
+                                                    }
+                                                    else -> {
+                                                        tieCount++
+                                                    }
                                                 }
-                                                else if (result == "Orange") {
-                                                    p2WinCount++
-                                                }
-                                                else {
-                                                    tieCount++
-                                                }
-                                                navigateToGameOver(GameOver(resultMessage = message))
+                                                navigateToGameOver(GameOver(resultMessage = message, p1Wins = p1WinCount, p2Wins = p2WinCount, ties = tieCount))
                                             } else {
                                                 currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
                                             }

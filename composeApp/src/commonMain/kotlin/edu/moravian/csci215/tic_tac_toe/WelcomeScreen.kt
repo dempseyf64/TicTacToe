@@ -61,7 +61,7 @@ fun WelcomeScreen(
             modifier = Modifier.fillMaxSize().padding(16.dp),
         ) {
             Text(
-                text = "Welcome to Tic-Tac-Toe!",
+                text = stringResource(Res.string.welcome),
                 style = TextStyle(
                     fontFamily = OverlockFont(),
                     fontSize = 60.sp,
@@ -77,8 +77,8 @@ fun WelcomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                PlayerSetupField("Player 1", name1, { name1 = it }, type1, { type1 = it })
-                PlayerSetupField("Player 2", name2, { name2 = it }, type2, { type2 = it })
+                PlayerSetupField(stringResource(Res.string.player1), name1, { name1 = it }, type1, { type1 = it })
+                PlayerSetupField(stringResource(Res.string.player2), name2, { name2 = it }, type2, { type2 = it })
             }
 
             Spacer(modifier = Modifier.height(48.dp))
@@ -102,7 +102,7 @@ fun WelcomeScreen(
                 )
             ) {
                 Text(
-                    text = "Start!",
+                    text = stringResource(Res.string.start),
                     style = TextStyle(
                         fontFamily = OverlockFont(),
                         fontSize = 26.sp,
@@ -125,7 +125,10 @@ fun PlayerSetupField(
     onTypeChange: (String) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val types = listOf("Human", "Easy AI", "Medium AI", "Hard AI")
+    val types = listOf(stringResource(Res.string.humanplayer),
+        stringResource(Res.string.easyaiplayer),
+        stringResource(Res.string.mediumaiplayer),
+        stringResource(Res.string.hardaiplayer))
 
     val primary = RedPrimary
     val surface = WhiteSecondary
@@ -173,7 +176,7 @@ fun PlayerSetupField(
                             textAlign = TextAlign.Center
                         )
                     )
-                    Text("▼")
+                    Text(stringResource(Res.string.arrow))
                 }
             }
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
