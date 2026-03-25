@@ -15,9 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import tictactoe.composeapp.generated.resources.Papernotes
-import tictactoe.composeapp.generated.resources.Res
+import tictactoe.composeapp.generated.resources.*
 import tictactoe.composeapp.generated.resources.checkerBkgd
 
 // variables for same theme consistency
@@ -27,6 +29,8 @@ private val primaryColor = Color(0xFFB01212)
 private val primaryAltColor = Color(0xFFFc7474)
 private val secondaryColor = Color.White
 
+@Serializable
+data object Welcome
 
 @Composable
 fun WelcomeScreen(
@@ -34,7 +38,7 @@ fun WelcomeScreen(
     onStartGame: (String, String, String, String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val starterNames = listOf("Bob", "Chris", "Amanda", "Alexis")
+    val starterNames = listOf(stringResource(Res.string.randomname1), stringResource(Res.string.randomname2), stringResource(Res.string.randomname3), stringResource(Res.string.randomname4))
 
 
     var name1 by rememberSaveable { mutableStateOf(starterNames.random()) }

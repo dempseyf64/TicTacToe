@@ -9,13 +9,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import tictactoe.composeapp.generated.resources.*
+
+@Serializable
+data class Game(
+    val player1Name: String,
+    val player2Name: String
+)
 
 @Composable
 fun GameScreen(
     player1Name: String,
-    player2Name: String
+    player2Name: String,
+    navigateToGameOver: (GameOver) -> Unit
 ) {
     var board by remember { mutableStateOf(List(9) { "" }) }
     var currentPlayerState by remember { mutableStateOf("Strawberry") }

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <string name="app_name">Tic-Tac-Toe</string>
+    <string name="randomname1">Bob</string>
+    <string name="randomname2">Chris</string>
+    <string name="randomname3">Amanda</string>
+    <string name="randomname4">Alexis</string>
+    <string name="back">Back</string>
 </resources>
