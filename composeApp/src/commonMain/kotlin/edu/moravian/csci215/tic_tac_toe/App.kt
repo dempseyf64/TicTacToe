@@ -19,67 +19,85 @@ import androidx.navigation.toRoute
 import androidx.savedstate.SavedState
 import kotlinx.coroutines.launch
 import kotlin.text.get
+import kotlinx.serialization.Serializable
 
 /**
  * The main entry point for the application's UI.
  * Manages the Scaffold, top app bar visibility, and navigation between screens.
  */
+// Add this at the top with your other @Serializable objects (Welcome, Game)
+@Serializable
+data class GameOver(val resultMessage: String)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
 
-    // If you kept the simplified AppTheme, keep this wrapper.
-    // If you deleted AppTheme entirely, you can remove this line.
-        Scaffold(
-            snackbarHost = { SnackbarHost(snackbarHostState) },
-            topBar = {
-                val curBackStackEntry by navController.currentBackStackEntryAsState()
-                val curDestination = curBackStackEntry?.destination
+    Scaffold(
+        containerColor = WhiteSecondary,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            val curBackStackEntry by navController.currentBackStackEntryAsState()
+            val curDestination = curBackStackEntry?.destination
 
-                // Only show TopAppBar if we aren't on the Welcome screen
-                if (curDestination?.hasRoute<Welcome>() != true) {
-                    TopAppBar(
-                        title = { Text(stringResource(Res.string.app_name)) },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            // UPDATED: Use your Global Constants here
-                            containerColor = RedPrimary,
-                            titleContentColor = WhiteSecondary,
-                            navigationIconContentColor = WhiteSecondary
-                        ),
-                        navigationIcon = {
-                            IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(
-                                    painter = painterResource(Res.drawable.arrow_left),
-                                    contentDescription = stringResource(Res.string.back)
-                                )
-                            }
-                        },
-                    )
-                }
-            },
-        ) { innerPadding ->
-            NavHost(
-                navController = navController,
-                startDestination = Welcome,
-                modifier = Modifier.padding(innerPadding),
-            ) {
-                composable<Welcome> {
-                    WelcomeScreen(
-                        snackbarHostState = snackbarHostState,
-                        onStartGame = { p1, _, p2, _ ->
-                            navController.navigate(Game(p1, p2))
+            if (curDestination?.hasRoute<Welcome>() != true) {
+                TopAppBar(
+                    title = { Text(stringResource(Res.string.app_name)) },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = RedPrimary,
+                        titleContentColor = WhiteSecondary,
+                        navigationIconContentColor = WhiteSecondary
+                    ),
+                    navigationIcon = {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                painter = painterResource(Res.drawable.arrow_left),
+                                contentDescription = stringResource(Res.string.back)
+                            )
                         }
-                    )
-                }
-                composable<Game> { backStackEntry ->
-                    val game = backStackEntry.toRoute<Game>()
-                    GameScreen(game.player1Name, game.player2Name) {
-                        navController.navigate(it)
+                    },
+                )
+            }
+        },
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Welcome,
+            modifier = Modifier.padding(innerPadding),
+        ) {
+            composable<Welcome> {
+                WelcomeScreen(
+                    snackbarHostState = snackbarHostState,
+                    onStartGame = { p1, _, p2, _ ->
+                        navController.navigate(Game(p1, p2))
                     }
-                }
+                )
+            }
+
+            composable<Game> { backStackEntry ->
+                val game = backStackEntry.toRoute<Game>()
+                GameScreen(
+                    player1Name = game.player1Name,
+                    player2Name = game.player2Name,
+                    navigateToGameOver = { result ->
+                        navController.navigate(result)
+                    }
+                )
+            }
+
+            composable<GameOver> { backStackEntry ->
+                val gameOverData = backStackEntry.toRoute<GameOver>()
+                GameOverScreen(
+                    resultText = gameOverData.resultMessage,
+                    onPlayAgain = {
+                        navController.navigate(Welcome) {
+                            popUpTo(Welcome) { inclusive = true }
+                        }
+                    }
+                )
             }
         }
-
+    }
 }

@@ -93,13 +93,18 @@ fun GameScreen(
                                             newBoard[cellIndex] = currentPlayerState
                                             board = newBoard
 
-                                            // Switch turn
-                                            currentPlayerState =
-                                                if (currentPlayerState == "Strawberry") {
-                                                    "Orange"
-                                                } else {
-                                                    "Strawberry"
+                                            val result = checkGameResult(newBoard)
+
+                                            if (result != null) {
+                                                val message = when (result) {
+                                                    "Strawberry" -> "$player1Name Wins!\n(Strawberry)"
+                                                    "Orange" -> "$player2Name Wins!\n(Orange)"
+                                                    else -> "It's a Tie!"
                                                 }
+                                                navigateToGameOver(GameOver(resultMessage = message))
+                                            } else {
+                                                currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
+                                            }
                                         },
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -120,4 +125,28 @@ fun GameScreen(
             }
         }
     }
+}
+
+/**
+ * Checks the board for a winner or a tie.
+ * Returns "Strawberry", "Orange", "Tie", or null if game is ongoing.
+ */
+fun checkGameResult(board: List<String>): String? {
+    val winLines = listOf(
+        listOf(0, 1, 2), listOf(3, 4, 5), listOf(6, 7, 8), // Rows
+        listOf(0, 3, 6), listOf(1, 4, 7), listOf(2, 5, 8), // Cols
+        listOf(0, 4, 8), listOf(2, 4, 6)                 // Diagonals
+    )
+
+    for (line in winLines) {
+        if (board[line[0]].isNotEmpty() &&
+            board[line[0]] == board[line[1]] &&
+            board[line[0]] == board[line[2]]) {
+            return board[line[0]]
+        }
+    }
+
+    if (board.none { it.isEmpty() }) return "Tie"
+
+    return null
 }
