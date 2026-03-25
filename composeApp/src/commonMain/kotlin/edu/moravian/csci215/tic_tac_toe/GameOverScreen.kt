@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -25,6 +26,7 @@ fun GameOverScreen(
     onPlayAgain: () -> Unit,
     onGoHome: () -> Unit
 ) {
+    val size = LocalWindowInfo.current.containerDpSize
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(Res.drawable.checkerBkgd),
@@ -51,7 +53,7 @@ fun GameOverScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(if (size.height > size.width) 16.dp else 8.dp))
 
             Text(
                 text = resultText,
@@ -64,7 +66,7 @@ fun GameOverScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(if (size.height > size.width) 32.dp else 16.dp))
 
             Row {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -106,7 +108,7 @@ fun GameOverScreen(
                         ))
                 }
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(if (size.height > size.width) 16.dp else 8.dp))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text(stringResource(Res.string.orange),
@@ -127,7 +129,7 @@ fun GameOverScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(if (size.height > size.width) 32.dp else 16.dp))
 
             Button(
                 onClick = onPlayAgain,
