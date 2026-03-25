@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +35,8 @@ fun GameScreen(
     var currentPlayerState by remember { mutableStateOf("Strawberry") }
     val displayName = if (currentPlayerState == "Strawberry") player1Name else player2Name
 
+    val size = LocalWindowInfo.current.containerDpSize
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         Image(
@@ -44,78 +47,159 @@ fun GameScreen(
             alpha = 0.5f
         )
 
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "$displayName's turn\n( $currentPlayerState )",
-                style = TextStyle(
-                    fontFamily = OverlockFont(),
-                    fontSize = 36.sp,
-                    fontWeight = FontWeight.Black,
-                    color = RedPrimary,
-                    textAlign = TextAlign.Center
-                )
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Box(
-                modifier = Modifier.size(300.dp),
-                contentAlignment = Alignment.Center
+        if (size.height > size.width) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    painter = painterResource(Res.drawable.grid),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                Text(
+                    text = "$displayName's turn\n( $currentPlayerState )",
+                    style = TextStyle(
+                        fontFamily = OverlockFont(),
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.Black,
+                        color = RedPrimary,
+                        textAlign = TextAlign.Center
+                    )
                 )
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceEvenly
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Box(
+                    modifier = Modifier.size(300.dp),
+                    contentAlignment = Alignment.Center
                 ) {
-                    repeat(3) { rowIndex ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            repeat(3) { columnIndex ->
-                                val cellIndex = rowIndex * 3 + columnIndex
-                                val cellValue = board[cellIndex]
+                    Image(
+                        painter = painterResource(Res.drawable.grid),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
 
-                                Box(
-                                    modifier = Modifier
-                                        .size(90.dp)
-                                        .clickable(enabled = cellValue == "") {
-                                            val newBoard = board.toMutableList()
-                                            newBoard[cellIndex] = currentPlayerState
-                                            board = newBoard
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        repeat(3) { rowIndex ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                repeat(3) { columnIndex ->
+                                    val cellIndex = rowIndex * 3 + columnIndex
+                                    val cellValue = board[cellIndex]
 
-                                            val result = checkGameResult(newBoard)
+                                    Box(
+                                        modifier = Modifier
+                                            .size(if (size.height > size.width) 90.dp else 45.dp)
+                                            .clickable(enabled = cellValue == "") {
+                                                val newBoard = board.toMutableList()
+                                                newBoard[cellIndex] = currentPlayerState
+                                                board = newBoard
 
-                                            if (result != null) {
-                                                val (message, winnerId) = when (result) {
-                                                    "Strawberry" -> "$player1Name Wins!\n(Strawberry)" to 1
-                                                    "Orange" -> "$player2Name Wins!\n(Orange)" to 2
-                                                    else -> "It's a Tie!" to 0
+                                                val result = checkGameResult(newBoard)
+
+                                                if (result != null) {
+                                                    val (message, winnerId) = when (result) {
+                                                        "Strawberry" -> "$player1Name Wins!\n(Strawberry)" to 1
+                                                        "Orange" -> "$player2Name Wins!\n(Orange)" to 2
+                                                        else -> "It's a Tie!" to 0
+                                                    }
+                                                    navigateToGameOver(message, winnerId)
+                                                } else {
+                                                    currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
                                                 }
-                                                navigateToGameOver(message, winnerId)
-                                            } else {
-                                                currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
-                                            }
-                                        },
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    if (cellValue != "") {
-                                        val icon =
-                                            if (cellValue == "Strawberry") Res.drawable.strawberry else Res.drawable.orange
-                                        Image(
-                                            painter = painterResource(icon),
-                                            contentDescription = cellValue,
-                                            modifier = Modifier.padding(12.dp).fillMaxSize()
-                                        )
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (cellValue != "") {
+                                            val icon =
+                                                if (cellValue == "Strawberry") Res.drawable.strawberry else Res.drawable.orange
+                                            Image(
+                                                painter = painterResource(icon),
+                                                contentDescription = cellValue,
+                                                modifier = Modifier.padding(12.dp).fillMaxSize()
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "$displayName's turn\n( $currentPlayerState )",
+                    style = TextStyle(
+                        fontFamily = OverlockFont(),
+                        fontSize = 36.sp,
+                        fontWeight = FontWeight.Black,
+                        color = RedPrimary,
+                        textAlign = TextAlign.Center
+                    )
+                )
+
+                Box(
+                    modifier = Modifier.size(300.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(Res.drawable.grid),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        repeat(3) { rowIndex ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                repeat(3) { columnIndex ->
+                                    val cellIndex = rowIndex * 3 + columnIndex
+                                    val cellValue = board[cellIndex]
+
+                                    Box(
+                                        modifier = Modifier
+                                            .size(90.dp)
+                                            .clickable(enabled = cellValue == "") {
+                                                val newBoard = board.toMutableList()
+                                                newBoard[cellIndex] = currentPlayerState
+                                                board = newBoard
+
+                                                val result = checkGameResult(newBoard)
+
+                                                if (result != null) {
+                                                    val (message, winnerId) = when (result) {
+                                                        "Strawberry" -> "$player1Name Wins!\n(Strawberry)" to 1
+                                                        "Orange" -> "$player2Name Wins!\n(Orange)" to 2
+                                                        else -> "It's a Tie!" to 0
+                                                    }
+                                                    navigateToGameOver(message, winnerId)
+                                                } else {
+                                                    currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
+                                                }
+                                            },
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        if (cellValue != "") {
+                                            val icon =
+                                                if (cellValue == "Strawberry") Res.drawable.strawberry else Res.drawable.orange
+                                            Image(
+                                                painter = painterResource(icon),
+                                                contentDescription = cellValue,
+                                                modifier = Modifier.padding(6.dp).fillMaxSize()
+                                            )
+                                        }
                                     }
                                 }
                             }
