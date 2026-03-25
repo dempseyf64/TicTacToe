@@ -95,11 +95,24 @@ fun GameScreen(
 
                                             val result = checkGameResult(newBoard)
 
+                                            var p1WinCount = 0
+                                            var p2WinCount = 0
+                                            var tieCount = 0
+
                                             if (result != null) {
                                                 val message = when (result) {
                                                     "Strawberry" -> "$player1Name Wins!\n(Strawberry)"
                                                     "Orange" -> "$player2Name Wins!\n(Orange)"
                                                     else -> "It's a Tie!"
+                                                }
+                                                if (result == "Strawberry") {
+                                                    p1WinCount++
+                                                }
+                                                else if (result == "Orange") {
+                                                    p2WinCount++
+                                                }
+                                                else {
+                                                    tieCount++
                                                 }
                                                 navigateToGameOver(GameOver(resultMessage = message))
                                             } else {

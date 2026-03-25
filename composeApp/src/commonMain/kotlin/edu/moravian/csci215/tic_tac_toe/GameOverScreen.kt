@@ -59,7 +59,20 @@ fun GameOverScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(64.dp))
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Text(
+                text = "placeholder",
+                style = TextStyle(
+                    fontFamily = OverlockFont(),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = RedLight,
+                    textAlign = TextAlign.Center
+                )
+            )
+
+            Spacer(modifier = Modifier.height(32.dp))
 
             Button(
                 onClick = onPlayAgain,

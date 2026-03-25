@@ -92,9 +92,7 @@ fun App() {
                 GameOverScreen(
                     resultText = gameOverData.resultMessage,
                     onPlayAgain = {
-                        navController.navigate(Welcome) {
-                            popUpTo(Welcome) { inclusive = true }
-                        }
+                        navController.popBackStack()
                     }
                 )
             }
