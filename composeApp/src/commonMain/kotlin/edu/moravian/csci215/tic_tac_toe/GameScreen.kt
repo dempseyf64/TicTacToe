@@ -9,8 +9,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import tictactoe.composeapp.generated.resources.*
@@ -47,10 +50,14 @@ fun GameScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "$displayName's turn ( $currentPlayerState )",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = RedPrimary
+                text = "$displayName's turn\n( $currentPlayerState )",
+                style = TextStyle(
+                    fontFamily = OverlockFont(),
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Black,
+                    color = RedPrimary,
+                    textAlign = TextAlign.Center
+                )
             )
 
             Spacer(modifier = Modifier.height(24.dp))

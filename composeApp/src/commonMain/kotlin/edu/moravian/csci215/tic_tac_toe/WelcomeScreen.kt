@@ -10,9 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
@@ -60,13 +62,17 @@ fun WelcomeScreen(
         ) {
             Text(
                 text = "Welcome to Tic-Tac-Toe!",
-                style = MaterialTheme.typography.displayLarge,
-                fontWeight = FontWeight.Bold,
-                color = RedPrimary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
+                style = TextStyle(
+                    fontFamily = OverlockFont(),
+                    fontSize = 60.sp,
+                    fontWeight = FontWeight.Black,
+                    color = RedPrimary,
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 32.dp)
             )
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -97,7 +103,13 @@ fun WelcomeScreen(
             ) {
                 Text(
                     text = "Start!",
-                    style = MaterialTheme.typography.headlineSmall
+                    style = TextStyle(
+                        fontFamily = OverlockFont(),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = WhiteSecondary,
+                        textAlign = TextAlign.Center
+                    )
                 )
             }
         }
@@ -123,11 +135,16 @@ fun PlayerSetupField(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+        //ROW 1
         Text(
             text = label,
-            color = primary,
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Medium
+            style = TextStyle(
+                fontFamily = OverlockFont(),
+                fontSize = 26.sp,
+                fontWeight = FontWeight.Bold,
+                color = RedPrimary,
+                textAlign = TextAlign.Center
+            )
         )
 
         // ROW 2
@@ -146,14 +163,32 @@ fun PlayerSetupField(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(type)
+                    Text(
+                        text = type,
+                        style = TextStyle(
+                            fontFamily = OverlockFont(),
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RedPrimary,
+                            textAlign = TextAlign.Center
+                        )
+                    )
                     Text("▼")
                 }
             }
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 types.forEach { selection ->
                     DropdownMenuItem(
-                        text = { Text(selection) },
+                        text = { Text(
+                            text = selection,
+                            style = TextStyle(
+                                fontFamily = OverlockFont(),
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = RedPrimary,
+                                textAlign = TextAlign.Center
+                            )
+                        ) },
                         onClick = {
                             onTypeChange(selection)
                             expanded = false
@@ -169,7 +204,16 @@ fun PlayerSetupField(
             onValueChange = onNameChange,
             modifier = SharedModifier.border(2.dp, primary, capsule),
             shape = capsule,
-            label = { Text("$label Name") },
+            label = { Text(
+                    text = "$label Name",
+                    style = TextStyle(
+                        fontFamily = OverlockFont(),
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = RedPrimary,
+                        textAlign = TextAlign.Center
+                    ))
+                    },
             singleLine = true,
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = surface,
