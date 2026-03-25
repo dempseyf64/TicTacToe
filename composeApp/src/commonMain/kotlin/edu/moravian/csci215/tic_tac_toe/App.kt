@@ -34,6 +34,9 @@ data class GameOver(val resultMessage: String, val p1Wins: Int, val p2Wins: Int,
 fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
+    var p1TotalWins by remember { mutableStateOf(0) }
+    var p2TotalWins by remember { mutableStateOf(0) }
+    var totalTies by remember { mutableStateOf(0) }
 
     Scaffold(
         containerColor = WhiteSecondary,
@@ -81,8 +84,14 @@ fun App() {
                 GameScreen(
                     player1Name = game.player1Name,
                     player2Name = game.player2Name,
-                    navigateToGameOver = { result ->
-                        navController.navigate(result)
+                    // 2. Update scores based on game result before navigating
+                    navigateToGameOver = { resultMessage, winner ->
+                        when (winner) {
+                            1 -> p1TotalWins++
+                            2 -> p2TotalWins++
+                            else -> totalTies++
+                        }
+                        navController.navigate(GameOver(resultMessage, p1TotalWins, p2TotalWins, totalTies))
                     }
                 )
             }
@@ -95,7 +104,17 @@ fun App() {
                     p2Wins = gameOverData.p2Wins,
                     ties = gameOverData.ties,
                     onPlayAgain = {
+                        // Return to game screen; state remains
                         navController.popBackStack()
+                    },
+                    onGoHome = {
+                        // Reset all data and clear the backstack to Welcome
+                        p1TotalWins = 0
+                        p2TotalWins = 0
+                        totalTies = 0
+                        navController.navigate(Welcome) {
+                            popUpTo(Welcome) { inclusive = true }
+                        }
                     }
                 )
             }

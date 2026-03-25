@@ -22,7 +22,8 @@ fun GameOverScreen(
     p1Wins: Int,
     p2Wins: Int,
     ties: Int,
-    onPlayAgain: () -> Unit
+    onPlayAgain: () -> Unit,
+    onGoHome: () -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -139,6 +140,27 @@ fun GameOverScreen(
             ) {
                 Text(
                     text = stringResource(Res.string.playagain),
+                    style = TextStyle(
+                        fontFamily = OverlockFont(),
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = onGoHome,
+                modifier = SharedSize,
+                shape = Capsule,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = RedPrimary,
+                    contentColor = WhiteSecondary
+                )
+            ) {
+                Text(
+                    text = stringResource(Res.string.gohome),
                     style = TextStyle(
                         fontFamily = OverlockFont(),
                         fontSize = 26.sp,

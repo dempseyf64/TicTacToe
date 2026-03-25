@@ -11,6 +11,7 @@
     <string name="tie">Ties</string>
     <string name="orange">Orange</string>
     <string name="playagain">Play Again</string>
+    <string name="gohome">Go Home</string>
     <string name="humanplayer">Human</string>
     <string name="easyaiplayer">Easy Ai</string>
     <string name="mediumaiplayer">Medium Ai</string>

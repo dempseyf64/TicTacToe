@@ -28,7 +28,7 @@ data class Game(
 fun GameScreen(
     player1Name: String,
     player2Name: String,
-    navigateToGameOver: (GameOver) -> Unit
+    navigateToGameOver: (String, Int) -> Unit
 ) {
     var board by remember { mutableStateOf(List(9) { "" }) }
     var currentPlayerState by remember { mutableStateOf("Strawberry") }
@@ -95,28 +95,13 @@ fun GameScreen(
 
                                             val result = checkGameResult(newBoard)
 
-                                            var p1WinCount = 0
-                                            var p2WinCount = 0
-                                            var tieCount = 0
-
                                             if (result != null) {
-                                                val message = when (result) {
-                                                    "Strawberry" -> "$player1Name Wins!\n(Strawberry)"
-                                                    "Orange" -> "$player2Name Wins!\n(Orange)"
-                                                    else -> "It's a Tie!"
+                                                val (message, winnerId) = when (result) {
+                                                    "Strawberry" -> "$player1Name Wins!\n(Strawberry)" to 1
+                                                    "Orange" -> "$player2Name Wins!\n(Orange)" to 2
+                                                    else -> "It's a Tie!" to 0
                                                 }
-                                                when (result) {
-                                                    "Strawberry" -> {
-                                                        p1WinCount++
-                                                    }
-                                                    "Orange" -> {
-                                                        p2WinCount++
-                                                    }
-                                                    else -> {
-                                                        tieCount++
-                                                    }
-                                                }
-                                                navigateToGameOver(GameOver(resultMessage = message, p1Wins = p1WinCount, p2Wins = p2WinCount, ties = tieCount))
+                                                navigateToGameOver(message, winnerId)
                                             } else {
                                                 currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
                                             }
