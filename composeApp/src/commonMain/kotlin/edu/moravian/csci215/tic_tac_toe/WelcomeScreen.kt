@@ -1,16 +1,15 @@
 package edu.moravian.csci215.tic_tac_toe
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -18,16 +17,9 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import tictactoe.composeapp.generated.resources.Papernotes
 import tictactoe.composeapp.generated.resources.*
-import tictactoe.composeapp.generated.resources.checkerBkgd
 
-// variables for same theme consistency
-private val CapsuleShape = CircleShape
-private val SharedModifier = Modifier.width(180.dp).height(56.dp)
-private val primaryColor = Color(0xFFB01212)
-private val primaryAltColor = Color(0xFFFc7474)
-private val secondaryColor = Color.White
+val SharedModifier = Modifier.width(180.dp).height(56.dp)
 
 @Serializable
 data object Welcome
@@ -38,24 +30,29 @@ fun WelcomeScreen(
     onStartGame: (String, String, String, String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val starterNames = listOf(stringResource(Res.string.randomname1), stringResource(Res.string.randomname2), stringResource(Res.string.randomname3), stringResource(Res.string.randomname4))
 
+    val starterNames = listOf(
+        stringResource(Res.string.randomname1),
+        stringResource(Res.string.randomname2),
+        stringResource(Res.string.randomname3),
+        stringResource(Res.string.randomname4)
+    )
 
     var name1 by rememberSaveable { mutableStateOf(starterNames.random()) }
     var name2 by rememberSaveable { mutableStateOf(starterNames.random()) }
     var type1 by rememberSaveable { mutableStateOf("Human") }
     var type2 by rememberSaveable { mutableStateOf("Human") }
 
-
     Box(modifier = Modifier.fillMaxSize()) {
-        // checkered background imagery
+        // Background Image
         Image(
             painter = painterResource(Res.drawable.checkerBkgd),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
-            alpha = 0.5f // opacity
+            contentScale = ContentScale.Crop,
+            alpha = 0.5f
         )
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -65,7 +62,7 @@ fun WelcomeScreen(
                 text = "Welcome to Tic-Tac-Toe!",
                 style = MaterialTheme.typography.displayLarge,
                 fontWeight = FontWeight.Bold,
-                color = primaryColor,
+                color = RedPrimary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp)
             )
@@ -80,6 +77,7 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(48.dp))
 
+            // Start Button
             Button(
                 onClick = {
                     if (name1.isBlank() || name2.isBlank()) {
@@ -91,10 +89,10 @@ fun WelcomeScreen(
                     }
                 },
                 modifier = SharedModifier,
-                shape = CapsuleShape,
+                shape = Capsule,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryColor,
-                    contentColor = secondaryColor
+                    containerColor = RedPrimary,
+                    contentColor = WhiteSecondary,
                 )
             ) {
                 Text(
@@ -117,26 +115,30 @@ fun PlayerSetupField(
     var expanded by remember { mutableStateOf(false) }
     val types = listOf("Human", "Easy AI", "Medium AI", "Hard AI")
 
+    val primary = RedPrimary
+    val surface = WhiteSecondary
+    val capsule = Capsule
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // ROW 1
         Text(
             text = label,
-            color = primaryColor,
+            color = primary,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Medium
         )
+
         // ROW 2
         Box {
             Button(
                 onClick = { expanded = true },
-                modifier = SharedModifier,
-                shape = CapsuleShape,
+                modifier = SharedModifier.border(2.dp, primary, capsule),
+                shape = capsule,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = secondaryColor,
-                    contentColor = primaryColor
+                    containerColor = surface,
+                    contentColor = primary
                 )
             ) {
                 Row(
@@ -165,15 +167,17 @@ fun PlayerSetupField(
         TextField(
             value = name,
             onValueChange = onNameChange,
-            modifier = SharedModifier,
-            shape = CapsuleShape,
+            modifier = SharedModifier.border(2.dp, primary, capsule),
+            shape = capsule,
             label = { Text("$label Name") },
             singleLine = true,
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = secondaryColor,
-                unfocusedContainerColor = secondaryColor,
+                focusedContainerColor = surface,
+                unfocusedContainerColor = surface,
                 focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent
+                unfocusedIndicatorColor = Color.Transparent,
+                focusedLabelColor = primary,
+                unfocusedLabelColor = primary.copy(alpha = 0.6f)
             )
         )
     }

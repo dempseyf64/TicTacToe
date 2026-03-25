@@ -8,6 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
@@ -29,67 +31,80 @@ fun GameScreen(
     var currentPlayerState by remember { mutableStateOf("Strawberry") }
     val displayName = if (currentPlayerState == "Strawberry") player1Name else player2Name
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Current Player: $displayName",
-            style = MaterialTheme.typography.headlineSmall
+    Box(modifier = Modifier.fillMaxSize()) {
+
+        Image(
+            painter = painterResource(Res.drawable.checkerBkgd),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alpha = 0.5f
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Box(
-            modifier = Modifier.size(300.dp),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(Res.drawable.grid),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize()
+            Text(
+                text = "$displayName's turn ( $currentPlayerState )",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                color = RedPrimary
             )
 
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceEvenly
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Box(
+                modifier = Modifier.size(300.dp),
+                contentAlignment = Alignment.Center
             ) {
-                repeat(3) { rowIndex ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        repeat(3) { columnIndex ->
-                            val cellIndex = rowIndex * 3 + columnIndex
-                            val cellValue = board[cellIndex]
+                Image(
+                    painter = painterResource(Res.drawable.grid),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
 
-                            Box(
-                                modifier = Modifier
-                                    .size(90.dp)
-                                    .clickable(enabled = cellValue == "") {
-                                        val newBoard = board.toMutableList()
-                                        newBoard[cellIndex] = currentPlayerState
-                                        board = newBoard
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    repeat(3) { rowIndex ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            repeat(3) { columnIndex ->
+                                val cellIndex = rowIndex * 3 + columnIndex
+                                val cellValue = board[cellIndex]
 
-                                        // Switch turn
-                                        currentPlayerState = if (currentPlayerState == "Strawberry") {
-                                            "Orange"
-                                        } else {
-                                            "Strawberry"
-                                        }
-                                    },
-                                contentAlignment = Alignment.Center
-                            ) {
-                                if (cellValue != "") {
-                                    val icon = if (cellValue == "Strawberry") Res.drawable.strawberry else Res.drawable.orange
-                                    Image(
-                                        painter = painterResource(icon),
-                                        contentDescription = cellValue,
-                                        modifier = Modifier.padding(12.dp).fillMaxSize()
-                                    )
+                                Box(
+                                    modifier = Modifier
+                                        .size(90.dp)
+                                        .clickable(enabled = cellValue == "") {
+                                            val newBoard = board.toMutableList()
+                                            newBoard[cellIndex] = currentPlayerState
+                                            board = newBoard
+
+                                            // Switch turn
+                                            currentPlayerState =
+                                                if (currentPlayerState == "Strawberry") {
+                                                    "Orange"
+                                                } else {
+                                                    "Strawberry"
+                                                }
+                                        },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    if (cellValue != "") {
+                                        val icon =
+                                            if (cellValue == "Strawberry") Res.drawable.strawberry else Res.drawable.orange
+                                        Image(
+                                            painter = painterResource(icon),
+                                            contentDescription = cellValue,
+                                            modifier = Modifier.padding(12.dp).fillMaxSize()
+                                        )
+                                    }
                                 }
                             }
                         }

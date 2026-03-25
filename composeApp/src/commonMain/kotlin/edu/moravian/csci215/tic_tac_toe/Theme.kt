@@ -1,44 +1,17 @@
 package edu.moravian.csci215.tic_tac_toe
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Typography
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 
-val lightScheme = lightColorScheme()
-val darkScheme = darkColorScheme()
+// Colors
+val RedPrimary = Color(0xFFB01212)
+val RedLight = Color(0xFFFc7474)
+val WhiteSecondary = Color.White
 
-@Composable
-fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
-) {
-    val colorScheme = if (darkTheme) darkScheme else lightScheme
-
-    val fontFamily = getAppFontFamily()
-    val appTypography = Typography(
-        displayLarge = baseline.displayLarge.copy(fontFamily = fontFamily),
-        displayMedium = baseline.displayMedium.copy(fontFamily = fontFamily),
-        displaySmall = baseline.displaySmall.copy(fontFamily = fontFamily),
-        headlineLarge = baseline.headlineLarge.copy(fontFamily = fontFamily),
-        headlineMedium = baseline.headlineMedium.copy(fontFamily = fontFamily),
-        headlineSmall = baseline.headlineSmall.copy(fontFamily = fontFamily),
-        titleLarge = baseline.titleLarge.copy(fontFamily = fontFamily),
-        titleMedium = baseline.titleMedium.copy(fontFamily = fontFamily),
-        titleSmall = baseline.titleSmall.copy(fontFamily = fontFamily),
-        bodyLarge = baseline.bodyLarge.copy(fontFamily = fontFamily),
-        bodyMedium = baseline.bodyMedium.copy(fontFamily = fontFamily),
-        bodySmall = baseline.bodySmall.copy(fontFamily = fontFamily),
-        labelLarge = baseline.labelLarge.copy(fontFamily = fontFamily),
-        labelMedium = baseline.labelMedium.copy(fontFamily = fontFamily),
-        labelSmall = baseline.labelSmall.copy(fontFamily = fontFamily),
-    )
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = appTypography,
-        content = content
-    )
-}
+// Shapes & Modifiers
+val Capsule = CircleShape
+val SharedSize = Modifier.width(180.dp).height(56.dp)

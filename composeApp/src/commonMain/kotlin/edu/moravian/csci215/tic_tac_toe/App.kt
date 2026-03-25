@@ -30,22 +30,30 @@ fun App() {
     val snackbarHostState = remember { SnackbarHostState() }
     val navController = rememberNavController()
 
-    AppTheme {
+    // If you kept the simplified AppTheme, keep this wrapper.
+    // If you deleted AppTheme entirely, you can remove this line.
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
                 val curBackStackEntry by navController.currentBackStackEntryAsState()
                 val curDestination = curBackStackEntry?.destination
+
+                // Only show TopAppBar if we aren't on the Welcome screen
                 if (curDestination?.hasRoute<Welcome>() != true) {
                     TopAppBar(
                         title = { Text(stringResource(Res.string.app_name)) },
                         colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                            // UPDATED: Use your Global Constants here
+                            containerColor = RedPrimary,
+                            titleContentColor = WhiteSecondary,
+                            navigationIconContentColor = WhiteSecondary
                         ),
                         navigationIcon = {
                             IconButton(onClick = { navController.popBackStack() }) {
-                                Icon(painterResource(Res.drawable.arrow_left), contentDescription = stringResource(Res.string.back))
+                                Icon(
+                                    painter = painterResource(Res.drawable.arrow_left),
+                                    contentDescription = stringResource(Res.string.back)
+                                )
                             }
                         },
                     )
@@ -61,19 +69,17 @@ fun App() {
                     WelcomeScreen(
                         snackbarHostState = snackbarHostState,
                         onStartGame = { p1, _, p2, _ ->
-                            navController.navigate(Game(p1,p2))
+                            navController.navigate(Game(p1, p2))
                         }
                     )
                 }
                 composable<Game> { backStackEntry ->
                     val game = backStackEntry.toRoute<Game>()
-                    val p1Name = game.player1Name
-                    val p2Name = game.player2Name
-                    GameScreen(p1Name,p2Name){
+                    GameScreen(game.player1Name, game.player2Name) {
                         navController.navigate(it)
                     }
                 }
             }
         }
-    }
+
 }
