@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import edu.moravian.csci215.tic_tac_toe.GameLogic
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import tictactoe.composeapp.generated.resources.*
@@ -37,10 +38,35 @@ fun GameScreen(
     val scope = rememberCoroutineScope()
     var isAiThinking by remember { mutableStateOf(false) }
 
-    // Resets the board and player when welcomeScreen is shown
-    LaunchedEffect(Unit) {
-        board = List(9) { "" }
-        currentPlayerState = "Strawberry"
+    LaunchedEffect(currentPlayerState) {
+        val currentType = if (currentPlayerState == "Strawberry") player1Type else player2Type
+        val humanString = org.jetbrains.compose.resources.getString(Res.string.humanplayer)
+
+        if (currentType != humanString && GameLogic.checkGameResult(board) == null) {
+            isAiThinking = true
+            kotlinx.coroutines.delay(1000)
+
+            val aiMove = GameLogic.getEasyAiMove(board)
+
+            if (aiMove != -1) {
+                val newBoard = board.toMutableList()
+                newBoard[aiMove] = currentPlayerState
+                board = newBoard
+
+                val result = GameLogic.checkGameResult(newBoard)
+                if (result != null) {
+                    val (message, winnerId) = when (result) {
+                        "Strawberry" -> "$player1Name Wins!\n(Strawberry)" to 1
+                        "Orange" -> "$player2Name Wins!\n(Orange)" to 2
+                        else -> "It's a Tie!" to 0
+                    }
+                    navigateToGameOver(message, winnerId)
+                } else {
+                    currentPlayerState = if (currentPlayerState == "Strawberry") "Orange" else "Strawberry"
+                }
+            }
+            isAiThinking = false
+        }
     }
 
     val displayName = if (currentPlayerState == "Strawberry") player1Name else player2Name
@@ -103,14 +129,8 @@ fun GameScreen(
                                         modifier = Modifier
                                             .size(if (size.height > size.width) 90.dp else 45.dp)
                                             .clickable {
-                                                /**
-                                                if (aiTurnIsCurrent != "") {
-                                                scope.launch {
-                                                    snackbarHostState.showSnackbar("AI is thinking!")
-                                                }
-                                                return@clickable // Exit early
-                                                }
-                                                */
+
+                                                if (isAiThinking) return@clickable
 
                                                 if (cellValue != "") {
                                                     scope.launch {
@@ -123,7 +143,7 @@ fun GameScreen(
                                                 newBoard[cellIndex] = currentPlayerState
                                                 board = newBoard
 
-                                                val result = checkGameResult(newBoard)
+                                                val result = GameLogic.checkGameResult(newBoard)
 
                                                 if (result != null) {
                                                     val (message, winnerId) = when (result) {
@@ -202,7 +222,7 @@ fun GameScreen(
                                                 newBoard[cellIndex] = currentPlayerState
                                                 board = newBoard
 
-                                                val result = checkGameResult(newBoard)
+                                                val result = GameLogic.checkGameResult(newBoard)
 
                                                 if (result != null) {
                                                     val (message, winnerId) = when (result) {
@@ -237,26 +257,3 @@ fun GameScreen(
     }
 }
 
-/**
- * Checks the board for a winner or a tie.
- * Returns "Strawberry", "Orange", "Tie", or null if game is ongoing.
- */
-fun checkGameResult(board: List<String>): String? {
-    val winLines = listOf(
-        listOf(0, 1, 2), listOf(3, 4, 5), listOf(6, 7, 8), // Rows
-        listOf(0, 3, 6), listOf(1, 4, 7), listOf(2, 5, 8), // Cols
-        listOf(0, 4, 8), listOf(2, 4, 6)                 // Diagonals
-    )
-
-    for (line in winLines) {
-        if (board[line[0]].isNotEmpty() &&
-            board[line[0]] == board[line[1]] &&
-            board[line[0]] == board[line[2]]) {
-            return board[line[0]]
-        }
-    }
-
-    if (board.none { it.isEmpty() }) return "Tie"
-
-    return null
-}

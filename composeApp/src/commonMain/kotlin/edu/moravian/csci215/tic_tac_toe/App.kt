@@ -93,7 +93,9 @@ fun App() {
                 val game = backStackEntry.toRoute<Game>()
                 GameScreen(
                     player1Name = game.player1Name,
+                    player1Type = game.player1Type,
                     player2Name = game.player2Name,
+                    player2Type = game.player2Type,
                     snackbarHostState = snackbarHostState,
                     navigateToGameOver = { resultMessage, winner ->
                         when (winner) {
