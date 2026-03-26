@@ -17,6 +17,10 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tictactoe.composeapp.generated.resources.*
 
+/**
+ * The Game Over Screen displays the final result and the tournament scores.
+ * It allows the user to play again or return to the main menu.
+ */
 @Composable
 fun GameOverScreen(
     resultText: String,

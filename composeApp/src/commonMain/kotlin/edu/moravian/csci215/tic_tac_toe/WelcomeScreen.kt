@@ -22,6 +22,10 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import tictactoe.composeapp.generated.resources.*
 
+/**
+ * The Welcome Screen displays a title, along with two rows for player input.
+ * It allows the user to customize a game, along with if they want to use AI for the app.
+ */
 val SharedModifier = Modifier.width(180.dp).height(56.dp)
 
 @Serializable

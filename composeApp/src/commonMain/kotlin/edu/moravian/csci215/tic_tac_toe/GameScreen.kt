@@ -19,16 +19,23 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import tictactoe.composeapp.generated.resources.*
 
+/**
+ * The Game Screen displays the active tic tac toe game, including the grid and game pieces.
+ * A subheading is shown for the current player's turn.
+ */
 @Composable
 fun GameScreen(
     player1Name: String,
+    player1Type: String,
     player2Name: String,
+    player2Type: String,
     snackbarHostState: SnackbarHostState,
     navigateToGameOver: (String, Int) -> Unit
 ) {
     var board by remember { mutableStateOf(List(9) { "" }) }
     var currentPlayerState by remember { mutableStateOf("Strawberry") }
     val scope = rememberCoroutineScope()
+    var isAiThinking by remember { mutableStateOf(false) }
 
     // Resets the board and player when welcomeScreen is shown
     LaunchedEffect(Unit) {
