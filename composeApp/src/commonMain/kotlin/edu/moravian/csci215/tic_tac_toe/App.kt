@@ -54,7 +54,25 @@ fun App() {
                         navigationIconContentColor = WhiteSecondary
                     ),
                     navigationIcon = {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(onClick = {
+                            val curDestination = navController.currentBackStackEntry?.destination
+                            if (curDestination?.hasRoute<Game>() == true) {
+                                p1TotalWins = 0
+                                p2TotalWins = 0
+                                totalTies = 0
+
+                                navController.navigate(Welcome) {
+                                    // Pop everything up to the start of the graph
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        inclusive = true
+                                    }
+                                    launchSingleTop = true
+                                }
+                            } else {
+                                // Default behavior for other screens
+                                navController.popBackStack()
+                            }
+                        }) {
                             Icon(
                                 painter = painterResource(Res.drawable.arrow_left),
                                 contentDescription = stringResource(Res.string.back)
@@ -108,12 +126,15 @@ fun App() {
                         navController.popBackStack()
                     },
                     onGoHome = {
-                        // Reset all data and clear the backstack to Welcome
                         p1TotalWins = 0
                         p2TotalWins = 0
                         totalTies = 0
+
                         navController.navigate(Welcome) {
-                            popUpTo(Welcome) { inclusive = true }
+                            popUpTo(navController.graph.startDestinationId) {
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
                     }
                 )
