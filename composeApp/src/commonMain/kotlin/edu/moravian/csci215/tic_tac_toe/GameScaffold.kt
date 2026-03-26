@@ -26,6 +26,7 @@ data class Game(
     val player2Name: String,
     val player2Type: String
 )
+
 @Serializable
 data class GameOver(val resultMessage: String, val p1Wins: Int, val p2Wins: Int, val ties: Int)
 
@@ -103,7 +104,14 @@ fun App() {
                             2 -> p2TotalWins++
                             else -> totalTies++
                         }
-                        navController.navigate(GameOver(resultMessage, p1TotalWins, p2TotalWins, totalTies))
+                        navController.navigate(
+                            GameOver(
+                                resultMessage,
+                                p1TotalWins,
+                                p2TotalWins,
+                                totalTies
+                            )
+                        )
                     }
                 )
             }
