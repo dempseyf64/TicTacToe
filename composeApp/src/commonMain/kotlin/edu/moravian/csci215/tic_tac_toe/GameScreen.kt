@@ -46,7 +46,14 @@ fun GameScreen(
             isAiThinking = true
             kotlinx.coroutines.delay(1000)
 
-            val aiMove = GameLogic.getEasyAiMove(board)
+            val aiMove = when (currentType) {
+                org.jetbrains.compose.resources.getString(Res.string.hardaiplayer) ->
+                    GameLogic.getHardAiMove(board, currentPlayerState)
+                org.jetbrains.compose.resources.getString(Res.string.mediumaiplayer) ->
+                    GameLogic.getMediumAiMove(board, currentPlayerState)
+                else ->
+                    GameLogic.getEasyAiMove(board)
+            }
 
             if (aiMove != -1) {
                 val newBoard = board.toMutableList()

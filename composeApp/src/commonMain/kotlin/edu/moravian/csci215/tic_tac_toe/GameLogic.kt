@@ -21,13 +21,13 @@ object GameLogic {
         return null
     }
 
-    // easy AI
+    // easy AI, 100% random selection
     fun getEasyAiMove(board: List<String>): Int {
         val emptyIndices = board.indices.filter { board[it].isEmpty() }
         return if (emptyIndices.isNotEmpty()) emptyIndices.random() else -1
     }
 
-    // medium AI
+    // medium AI, more strategic
     fun getMediumAiMove(board: List<String>, aiPiece: String): Int {
         // trying to find a winning move for itself
         for (i in board.indices) {
@@ -41,5 +41,26 @@ object GameLogic {
         return getEasyAiMove(board)
     }
 
+    // hard AI, actively looks for where they can block opponent
+    fun getHardAiMove(board: List<String>, aiPiece: String): Int {
+        // 1. Try to win first
+        for (i in board.indices) {
+            if (board[i].isEmpty()) {
+                val testBoard = board.toMutableList()
+                testBoard[i] = aiPiece
+                if (checkGameResult(testBoard) == aiPiece) return i
+            }
+        }
 
-}
+        // 2. Block the opponent
+        val humanPiece = if (aiPiece == "Strawberry") "Orange" else "Strawberry"
+        for (i in board.indices) {
+            if (board[i].isEmpty()) {
+                val testBoard = board.toMutableList()
+                testBoard[i] = humanPiece
+                if (checkGameResult(testBoard) == humanPiece) return i
+            }
+        }
+        return getEasyAiMove(board)
+        }
+    }
