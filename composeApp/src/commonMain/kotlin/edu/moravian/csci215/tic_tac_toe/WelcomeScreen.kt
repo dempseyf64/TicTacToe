@@ -91,7 +91,8 @@ fun WelcomeScreen(
                 onClick = {
                     if (name1.isBlank() || name2.isBlank()) {
                         coroutineScope.launch {
-                            snackbarHostState.showSnackbar("Names cannot be empty!")
+                            val message = org.jetbrains.compose.resources.getString(Res.string.noNameError)
+                            snackbarHostState.showSnackbar(message)
                         }
                     } else {
                         onStartGame(name1, type1, name2, type2)

@@ -21,4 +21,6 @@
     <string name="player2">Player 2</string>
     <string name="welcome">Welcome to Tic-Tac-Toe!</string>
     <string name="arrow">▼</string>
+    <string name="noNameError">Name cannot be blank!</string>
+    <string name="takenSpot">That spot is taken!</string>
 </resources>

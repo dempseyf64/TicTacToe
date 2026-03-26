@@ -15,24 +15,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.serialization.Serializable
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import tictactoe.composeapp.generated.resources.*
-
-@Serializable
-data class Game(
-    val player1Name: String,
-    val player2Name: String
-)
 
 @Composable
 fun GameScreen(
     player1Name: String,
     player2Name: String,
+    snackbarHostState: SnackbarHostState,
     navigateToGameOver: (String, Int) -> Unit
 ) {
     var board by remember { mutableStateOf(List(9) { "" }) }
     var currentPlayerState by remember { mutableStateOf("Strawberry") }
+    val scope = rememberCoroutineScope()
+
+    // Resets the board and player when welcomeScreen is shown
+    LaunchedEffect(Unit) {
+        board = List(9) { "" }
+        currentPlayerState = "Strawberry"
+    }
+
     val displayName = if (currentPlayerState == "Strawberry") player1Name else player2Name
 
     val size = LocalWindowInfo.current.containerDpSize
@@ -92,7 +95,23 @@ fun GameScreen(
                                     Box(
                                         modifier = Modifier
                                             .size(if (size.height > size.width) 90.dp else 45.dp)
-                                            .clickable(enabled = cellValue == "") {
+                                            .clickable {
+                                                /**
+                                                if (aiTurnIsCurrent != "") {
+                                                scope.launch {
+                                                    snackbarHostState.showSnackbar("AI is thinking!")
+                                                }
+                                                return@clickable // Exit early
+                                                }
+                                                */
+
+                                                if (cellValue != "") {
+                                                    scope.launch {
+                                                        snackbarHostState.showSnackbar(org.jetbrains.compose.resources.getString(Res.string.takenSpot))
+                                                    }
+                                                    return@clickable // Exit early
+                                                }
+
                                                 val newBoard = board.toMutableList()
                                                 newBoard[cellIndex] = currentPlayerState
                                                 board = newBoard
